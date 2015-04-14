@@ -14,7 +14,7 @@ public class Homework implements Parcelable {
     protected boolean mCompletion;
     protected GregorianCalendar mDueDate;
     protected GregorianCalendar mRemindDate;
-    protected String mNotes;
+    protected String mNotes = "No Notes"; //default no notes
 
     public String getTitle() {
         return mTitle;

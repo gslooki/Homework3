@@ -16,5 +16,6 @@
     <string name="back">Back</string>
     <string name="edit">Edit</string>
     <string name="notes">Notes</string>
+    <string name="dummy_title">Dummy</string>
 
 </resources>

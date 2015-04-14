@@ -12,7 +12,8 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="430dp"
-        android:id="@+id/listView"
+        tools:listitem="@layout/list_item_homework"
+        android:id="@android:id/list"
         />
 
     <Button
