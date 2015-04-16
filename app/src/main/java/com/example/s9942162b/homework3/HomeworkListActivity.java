@@ -78,8 +78,9 @@ public class HomeworkListActivity extends ListActivity {
 
             TextView textView = (TextView) row.findViewById(R.id.list_text);
             // set the text
-            textView.setText(currentHomework.getTitle());
-
+            if(textView != null) {
+                textView.setText(currentHomework.getTitle());
+            }
             CheckBox checkBox = (CheckBox)row.findViewById(R.id.list_checkbox);
             checkBox.setChecked(currentHomework.isCompletion());
             return row;

@@ -17,5 +17,7 @@
     <string name="edit">Edit</string>
     <string name="notes">Notes</string>
     <string name="dummy_title">Dummy</string>
+    <string name="title_activity_homework_detail_edit">HomeworkDetailEditActivity</string>
+    <string name="finish">Finish</string>
 
 </resources>

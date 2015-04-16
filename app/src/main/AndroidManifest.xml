@@ -20,6 +20,10 @@
             android:name=".HomeworkDetailActivity"
             android:label="@string/title_activity_homework_detail" >
         </activity>
+        <activity
+            android:name=".HomeworkDetailEditActivity"
+            android:label="@string/title_activity_homework_detail_edit" >
+        </activity>
     </application>
 
 </manifest>
