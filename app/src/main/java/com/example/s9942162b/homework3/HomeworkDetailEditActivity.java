@@ -6,7 +6,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
@@ -24,22 +23,23 @@ public class HomeworkDetailEditActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homework_detail_edit);
-
         Button mFinishButton = (Button)findViewById(R.id.Finish_Button);
         mFinishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 EditText mTitleET = (EditText) findViewById(R.id.HTitleET);
-                EditText mCompletion = (EditText) findViewById(R.id.HCompletedET); //casting complete status
-                CheckBox mCompleteCB = (CheckBox) findViewById(R.id.checkbox_complete); //casting checkbox
                 DatePicker mDDDP = (DatePicker)findViewById(R.id.datePickerDueDate);
                 DatePicker mRDDP = (DatePicker)findViewById(R.id.datePickerRemindDate);
                 EditText mNotesET = (EditText)findViewById(R.id.HNotesET);
 
                 mTitle = mTitleET.getText().toString();
-                mCompleteB = mCompleteCB.isChecked();
-                mDueDate.set(mDDDP.getYear(), mDDDP.getMonth(), mDDDP.getDayOfMonth()); //set gregorian due date variable
-                mRemindDate.set(mRDDP.getYear(), mRDDP.getMonth(), mRDDP.getDayOfMonth()); //set gregorian remind date variable
+                mCompleteB = false;
+                if(mDDDP != null){
+                    mDueDate.set(mDDDP.getYear(), mDDDP.getMonth(), mDDDP.getDayOfMonth()); //set gregorian due date variable
+                }
+                if(mRDDP!=null){
+                    mRemindDate.set(mRDDP.getYear(), mRDDP.getMonth(), mRDDP.getDayOfMonth()); //set gregorian remind date variable
+                }
                 mNotes = mNotesET.getText().toString();
             }
         });

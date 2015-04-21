@@ -8,7 +8,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class DbOperator extends SQLiteOpenHelper {
+class DbOperator extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "DB_NAME";
@@ -21,7 +21,9 @@ public class DbOperator extends SQLiteOpenHelper {
             + "COL6 TEXT,COL7 REAL, COL8 INTEGER,COL9 TEXT not null);";
 
     public static final String CREATE_SECOND_TABLE = "create table if not exists "
-            + SECOND_TABLE_NAME+.........
+            + SECOND_TABLE_NAME
+            + " ( _id integer primary key autoincrement, COL1  TEXT NOT NULL, COL2 TEXT NOT NULL,COL3 TEXT, COL4 int, COL5 TEXT,"
+            + "COL6 TEXT,COL7 REAL, COL8 INTEGER,COL9 TEXT not null);";
 
     public DbOperator(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

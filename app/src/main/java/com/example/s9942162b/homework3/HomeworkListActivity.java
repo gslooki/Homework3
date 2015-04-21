@@ -9,17 +9,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.GregorianCalendar;
 
 
 public class HomeworkListActivity extends ListActivity {
-    private Homework[] mHomeworks = new Homework[]{
-        new Homework("Math 1", false, new GregorianCalendar(2014, 4, 5),new GregorianCalendar(2014, 4, 6), "Finish pls" )
-    };
+    private ArrayList<Homework> mHomeworks = new ArrayList(
+            (Collection<? extends Homework>) new Homework("Math 1", false, new GregorianCalendar(2014, 4, 5),new GregorianCalendar(2014, 4, 6), "Finish pls" ));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,13 +31,22 @@ public class HomeworkListActivity extends ListActivity {
         HomeworkAdapter adapter;
         adapter = new HomeworkAdapter(this, R.layout.activity_main, mHomeworks);
         setListAdapter(adapter);
+
+        Button mAddButton = (Button)findViewById(R.id.add_button);
+        mAddButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(HomeworkListActivity.this, HomeworkDetailEditActivity.class);
+                startActivity(i);
+            }
+        });
     }
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         Intent intent = new Intent(this, HomeworkDetailActivity.class);
-        intent.putExtra(HomeworkDetailActivity.HOMEWORK_PARCEL, mHomeworks[position]);
+        intent.putExtra(HomeworkDetailActivity.HOMEWORK_PARCEL, mHomeworks.get(position));
         startActivity(intent);
     }
     @Override
@@ -62,8 +73,7 @@ public class HomeworkListActivity extends ListActivity {
 
     private class HomeworkAdapter extends ArrayAdapter<Homework> {
         private int mResource;
-        private Homework[] mHomeworks;
-        public HomeworkAdapter(Context context, int resource, Homework[] homeworks) {
+        public HomeworkAdapter(Context context, int resource, ArrayList<Homework> homeworks) {
             super(context, resource, homeworks);
             mResource = resource;
             mHomeworks = homeworks;
@@ -74,7 +84,7 @@ public class HomeworkListActivity extends ListActivity {
                 row = getLayoutInflater().inflate(mResource, parent, false);
             }
 
-            Homework currentHomework = mHomeworks[position]; // get the joke at this position
+            final Homework currentHomework = mHomeworks.get(position); // get at this position
 
             TextView textView = (TextView) row.findViewById(R.id.list_text);
             // set the text
@@ -82,7 +92,16 @@ public class HomeworkListActivity extends ListActivity {
                 textView.setText(currentHomework.getTitle());
             }
             CheckBox checkBox = (CheckBox)row.findViewById(R.id.list_checkbox);
-            checkBox.setChecked(currentHomework.isCompletion());
+            if(checkBox != null) {
+                checkBox.setOnClickListener((new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mHomeworks.remove(this);
+                    }
+                }
+
+                ));
+            }
             return row;
         }
     }

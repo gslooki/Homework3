@@ -22,7 +22,7 @@ public class HomeworkDetailActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homework_detail);
         Intent intent = getIntent();
-        Homework mHomework = (Homework) intent.getParcelableExtra(HOMEWORK_PARCEL); //getting the relevant homework object
+        Homework mHomework = intent.getParcelableExtra(HOMEWORK_PARCEL); //getting the relevant homework object
 
         TextView mTitle = (TextView) findViewById(R.id.HTitleTV);
         mTitle.setText(mHomework.getTitle()); //setting the title
