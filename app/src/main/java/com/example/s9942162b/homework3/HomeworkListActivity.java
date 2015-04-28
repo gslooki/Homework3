@@ -15,21 +15,22 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.GregorianCalendar;
 
 
 public class HomeworkListActivity extends ListActivity {
-    private ArrayList<Homework> mHomeworks = new ArrayList(
-            (Collection<? extends Homework>) new Homework("Math 1", false, new GregorianCalendar(2014, 4, 5),new GregorianCalendar(2014, 4, 6), "Finish pls" ));
-
+    public ArrayList<Homework> mHomeworks = new ArrayList<>();
+    public static final String EDIT_HOMEWORK_PARCEL= "com.example.s9942162b.homework3.edit_homework";
+    public static final int ADD_HOMEWORK_REQUEST_CODE = 1;
+    public HomeworkAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        HomeworkAdapter adapter;
-        adapter = new HomeworkAdapter(this, R.layout.activity_main, mHomeworks);
+        mHomeworks.add(
+                new Homework("Math 1", false, new GregorianCalendar(2014, 4, 5),new GregorianCalendar(2014, 4, 6), "Finish pls" ));
+        adapter = new HomeworkAdapter(this, R.layout.list_item_homework, mHomeworks);
         setListAdapter(adapter);
 
         Button mAddButton = (Button)findViewById(R.id.add_button);
@@ -37,15 +38,24 @@ public class HomeworkListActivity extends ListActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(HomeworkListActivity.this, HomeworkDetailEditActivity.class);
-                startActivity(i);
+                startActivityForResult(i, ADD_HOMEWORK_REQUEST_CODE);
             }
         });
     }
-
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        if(requestCode==ADD_HOMEWORK_REQUEST_CODE){
+            if(resultCode == RESULT_OK){
+                Intent i = getIntent();
+                Homework mH = i.getParcelableExtra(EDIT_HOMEWORK_PARCEL);
+                mHomeworks.add(mH);
+                adapter.notifyDataSetChanged();
+            }
+        }
+    }
     @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
+    protected void onListItemClick(ListView l,View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        Intent intent = new Intent(this, HomeworkDetailActivity.class);
+        Intent intent = new Intent(HomeworkListActivity.this, HomeworkDetailActivity.class);
         intent.putExtra(HomeworkDetailActivity.HOMEWORK_PARCEL, mHomeworks.get(position));
         startActivity(intent);
     }
@@ -97,6 +107,7 @@ public class HomeworkListActivity extends ListActivity {
                     @Override
                     public void onClick(View v) {
                         mHomeworks.remove(this);
+                        adapter.notifyDataSetChanged();
                     }
                 }
 

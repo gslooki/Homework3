@@ -1,5 +1,6 @@
 package com.example.s9942162b.homework3;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -15,8 +16,6 @@ import java.util.GregorianCalendar;
 public class HomeworkDetailEditActivity extends ActionBarActivity {
     String mTitle;
     Boolean mCompleteB;
-    GregorianCalendar mDueDate = null;
-    GregorianCalendar mRemindDate = null;
     String mNotes;
 
     @Override
@@ -31,16 +30,24 @@ public class HomeworkDetailEditActivity extends ActionBarActivity {
                 DatePicker mDDDP = (DatePicker)findViewById(R.id.datePickerDueDate);
                 DatePicker mRDDP = (DatePicker)findViewById(R.id.datePickerRemindDate);
                 EditText mNotesET = (EditText)findViewById(R.id.HNotesET);
+                GregorianCalendar mDueDate = new GregorianCalendar();
+                GregorianCalendar mRemindDate = new GregorianCalendar();
 
                 mTitle = mTitleET.getText().toString();
                 mCompleteB = false;
                 if(mDDDP != null){
                     mDueDate.set(mDDDP.getYear(), mDDDP.getMonth(), mDDDP.getDayOfMonth()); //set gregorian due date variable
                 }
-                if(mRDDP!=null){
+                if(mRDDP!= null){
                     mRemindDate.set(mRDDP.getYear(), mRDDP.getMonth(), mRDDP.getDayOfMonth()); //set gregorian remind date variable
                 }
                 mNotes = mNotesET.getText().toString();
+                Homework mHomework = new Homework(mTitle,mCompleteB,mDueDate,mRemindDate,mNotes);
+                Intent i = new Intent(HomeworkDetailEditActivity.this,HomeworkListActivity.class);
+                i.putExtra(HomeworkListActivity.EDIT_HOMEWORK_PARCEL, mHomework);
+                setResult(RESULT_OK);
+
+                finish();
             }
         });
     }
