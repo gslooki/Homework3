@@ -64,12 +64,11 @@ public class Homework implements Parcelable {
         mNotes = notes;
     }
 
-
     protected Homework(Parcel in) {
         mTitle = in.readString();
         mCompletion = in.readByte() != 0x00;
-        mDueDate = (GregorianCalendar) in.readSerializable();
-        mRemindDate = (GregorianCalendar) in.readSerializable();
+        mDueDate = (GregorianCalendar) in.readValue(GregorianCalendar.class.getClassLoader());
+        mRemindDate = (GregorianCalendar) in.readValue(GregorianCalendar.class.getClassLoader());
         mNotes = in.readString();
     }
 
@@ -82,8 +81,8 @@ public class Homework implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(mTitle);
         dest.writeByte((byte) (mCompletion ? 0x01 : 0x00));
-        dest.writeSerializable(mDueDate);
-        dest.writeSerializable(mRemindDate);
+        dest.writeValue(mDueDate);
+        dest.writeValue(mRemindDate);
         dest.writeString(mNotes);
     }
 

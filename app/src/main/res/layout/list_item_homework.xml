@@ -19,6 +19,7 @@
         android:paddingTop="20dp"
         android:layout_alignParentRight="true"
         android:id="@+id/list_checkbox"
+        android:focusable="false"
         />
 
 </RelativeLayout>

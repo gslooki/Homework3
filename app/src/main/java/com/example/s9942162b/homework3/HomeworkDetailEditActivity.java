@@ -44,8 +44,13 @@ public class HomeworkDetailEditActivity extends ActionBarActivity {
                 mNotes = mNotesET.getText().toString();
                 Homework mHomework = new Homework(mTitle,mCompleteB,mDueDate,mRemindDate,mNotes);
                 Intent i = new Intent(HomeworkDetailEditActivity.this,HomeworkListActivity.class);
-                i.putExtra(HomeworkListActivity.EDIT_HOMEWORK_PARCEL, mHomework);
-                setResult(RESULT_OK);
+                i.putExtra("Homework", mHomework);
+                //i.putExtra("Title", mTitle);
+                //i.putExtra("DDate", mDueDate);
+                //i.putExtra("Complete", mCompleteB);
+                //i.putExtra("RDate", mRemindDate);
+                //i.putExtra("Notes", mNotes);
+                //setResult(RESULT_OK);
 
                 finish();
             }

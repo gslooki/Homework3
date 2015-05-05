@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-import java.text.DateFormat;
+import java.util.Calendar;
 
 
 public class HomeworkDetailActivity extends ActionBarActivity {
@@ -21,35 +21,37 @@ public class HomeworkDetailActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homework_detail);
-        Intent intent = getIntent();
-        Homework mHomework = intent.getParcelableExtra(HOMEWORK_PARCEL); //getting the relevant homework object
-
+        final Intent intent = getIntent();
+        Homework mHomework = intent.getParcelableExtra("HOMEWORK"); //getting the relevant homework object
+        final int position = intent.getIntExtra("POSITION", 0);
         TextView mTitle = (TextView) findViewById(R.id.HTitleTV);
         mTitle.setText(mHomework.getTitle()); //setting the title
-
-        TextView mCompletion = (TextView) findViewById(R.id.HCompletedTV); //casting complete status
         CheckBox mCompleteCB = (CheckBox) findViewById(R.id.checkbox_complete); //casting checkbox
-
         Boolean TFCompleteB = mHomework.isCompletion(); //getting true false value from homework object
-        String mTFCompleteS = String.valueOf(TFCompleteB); //setting a string for ease of reference
-        mCompletion.setText(mTFCompleteS); //setting true false value (of string)
         mCompleteCB.setChecked(TFCompleteB); //setting checkbox status
 
-        DateFormat mDateDF = android.text.format.DateFormat.getDateFormat(getApplicationContext()); //setting date format
+        //DateFormat mDateDF = android.text.format.DateFormat.getDateFormat(getApplicationContext()); //setting date format
         TextView mDateDue = (TextView) findViewById(R.id.HDueDateTV); //casting due date
-        mDateDue.setText(mDateDF.format(mHomework.getDueDate())); //setting due date and formating at the same time
+        mDateDue.setText(Integer.toString(mHomework.getDueDate().get(Calendar.YEAR)) + " " + Integer.toString(mHomework.getDueDate().get(Calendar.MONTH)) + " " + Integer.toString(mHomework.getDueDate().get(Calendar.DAY_OF_MONTH))); //setting due date and formating at the same time
+
 
         TextView mRemindDate = (TextView) findViewById(R.id.HRemindDateTV); //casting remind date
-        mDateDue.setText(mDateDF.format(mHomework.getRemindDate()));
-
+        //mRemindDate.setText(Integer.toString(mHomework.getRemindDate().get(Calendar.YEAR)) + " " + Integer.toString(mHomework.getRemindDate().get(Calendar.MONTH)) + " " + Integer.toString(mHomework.getRemindDate().get(Calendar.DAY_OF_MONTH)));
+        mRemindDate.setText(mHomework.getRemindDate().toString());
         TextView mNotes = (TextView) findViewById(R.id.HNotesTV);
         mNotes.setText(mHomework.getNotes()); //setting notes
 
-        Button mEditButton = (Button) findViewById(R.id.Edit_Button);
-        mEditButton.setOnClickListener(new View.OnClickListener() {
+        Button mFinishButton = (Button) findViewById(R.id.Finish_Button);
+        mFinishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                CheckBox mFinalCompleteCB = (CheckBox) findViewById(R.id.checkbox_complete);
+                Homework mHomework = intent.getParcelableExtra("HOMEWORK");
+                mHomework.setCompletion(mFinalCompleteCB.isChecked());
+                Intent i = new Intent(HomeworkDetailActivity.this,HomeworkListActivity.class);
+                i.putExtra("POSITION", position);
+                i.putExtra("HOMEWORK", mHomework);
+                finish();
             }
         });
     }

@@ -14,11 +14,16 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 
 public class HomeworkListActivity extends ListActivity {
+    public static JSONArray JA = new JSONArray();
     public ArrayList<Homework> mHomeworks = new ArrayList<>();
     public static final String EDIT_HOMEWORK_PARCEL= "com.example.s9942162b.homework3.edit_homework";
     public static final int ADD_HOMEWORK_REQUEST_CODE = 1;
@@ -26,12 +31,13 @@ public class HomeworkListActivity extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
 
         mHomeworks.add(
                 new Homework("Math 1", false, new GregorianCalendar(2014, 4, 5),new GregorianCalendar(2014, 4, 6), "Finish pls" ));
         adapter = new HomeworkAdapter(this, R.layout.list_item_homework, mHomeworks);
         setListAdapter(adapter);
+        setContentView(R.layout.activity_main);
 
         Button mAddButton = (Button)findViewById(R.id.add_button);
         mAddButton.setOnClickListener(new View.OnClickListener() {
@@ -46,19 +52,46 @@ public class HomeworkListActivity extends ListActivity {
         if(requestCode==ADD_HOMEWORK_REQUEST_CODE){
             if(resultCode == RESULT_OK){
                 Intent i = getIntent();
-                Homework mH = i.getParcelableExtra(EDIT_HOMEWORK_PARCEL);
+                Homework mH = i.getParcelableExtra("Homework");
+                //String mTitle = data.getStringExtra("Title");
+                //GregorianCalendar mDDate = data.get
                 mHomeworks.add(mH);
-                adapter.notifyDataSetChanged();
+                HomeworkAdapter adapter;
+                adapter = new HomeworkAdapter(this, R.layout.list_item_homework, mHomeworks);
+                setListAdapter(adapter);
+            }
+        }
+        if(requestCode==2) {
+            if (resultCode == RESULT_OK) {
+                Intent i = getIntent();
+                int position = i.getIntExtra("POSITION", 0);
+                Homework mH = i.getParcelableExtra("HOMEWORK");
+                mHomeworks.set(position,mH);
             }
         }
     }
     @Override
-    protected void onListItemClick(ListView l,View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
+    protected void onListItemClick(ListView list,View v, int position, long id) {
+        super.onListItemClick(list, v, position, id);
         Intent intent = new Intent(HomeworkListActivity.this, HomeworkDetailActivity.class);
-        intent.putExtra(HomeworkDetailActivity.HOMEWORK_PARCEL, mHomeworks.get(position));
-        startActivity(intent);
+        intent.putExtra("HOMEWORK", mHomeworks.get(position));
+        intent.putExtra("POSITION", position);
+        startActivityForResult(intent, 2);
     }
+
+    public void writeJSON(String title, boolean c, GregorianCalendar ddate, GregorianCalendar rdate, String n){
+        JSONObject j = new JSONObject();
+        try {
+            j.put("title", title);
+            j.put("complete", c);
+            j.put("ddate", ddate.toString());
+            j.put("rdate", rdate);
+            j.put("nickname", "Hacker");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    };
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -83,6 +116,7 @@ public class HomeworkListActivity extends ListActivity {
 
     private class HomeworkAdapter extends ArrayAdapter<Homework> {
         private int mResource;
+        private ArrayList<Homework> mHomeworks;
         public HomeworkAdapter(Context context, int resource, ArrayList<Homework> homeworks) {
             super(context, resource, homeworks);
             mResource = resource;
@@ -93,14 +127,9 @@ public class HomeworkListActivity extends ListActivity {
             if (row == null) { // this lets Android recycle the row if necessary
                 row = getLayoutInflater().inflate(mResource, parent, false);
             }
-
-            final Homework currentHomework = mHomeworks.get(position); // get at this position
-
-            TextView textView = (TextView) row.findViewById(R.id.list_text);
-            // set the text
-            if(textView != null) {
-                textView.setText(currentHomework.getTitle());
-            }
+            Homework currentHomework = mHomeworks.get(position); // get at this position
+            TextView tV = (TextView) row.findViewById(R.id.list_text);
+            tV.setText(currentHomework.getTitle());
             CheckBox checkBox = (CheckBox)row.findViewById(R.id.list_checkbox);
             if(checkBox != null) {
                 checkBox.setOnClickListener((new View.OnClickListener() {

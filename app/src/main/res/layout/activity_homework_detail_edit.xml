@@ -137,11 +137,6 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:text="@string/back"
-            android:id="@+id/Back_Button"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
             android:text="@string/finish"
             android:id="@+id/Finish_Button"/>
 
